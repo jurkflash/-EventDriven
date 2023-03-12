@@ -1,0 +1,2 @@
+docker build -f order/Dockerfile -t order .
+docker build -f cart/Dockerfile -t cart .

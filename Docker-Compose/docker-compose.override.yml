@@ -1,0 +1,48 @@
+version: '3.4'
+
+services:
+
+  rabbitmq:
+    container_name: rabbitmq
+    volumes:
+        - rabbitmq-data:/var/lib/rabbitmq
+    ports:
+        - "5672:5672"
+        - "15672:15672"
+    expose:
+        - 5672
+        - 15672
+    networks:
+      eventdrivennetwork:
+        aliases:
+          - rabbitmq-service.default
+            
+  cart:
+    container_name: cart
+    environment:
+        - ASPNETCORE_URLS=http://+:80
+    ports:
+        - "5090:80"
+    expose:
+        - 5090
+    depends_on:
+        - rabbitmq
+    networks:
+      eventdrivennetwork:
+        aliases:
+          - cart-service.default 
+        
+  order:
+    container_name: order
+    environment:
+        - ASPNETCORE_URLS=http://+:80
+    ports:
+        - "5088:80"
+    expose:
+        - 5088
+    depends_on:
+        - rabbitmq
+    networks:
+      eventdrivennetwork:
+        aliases:
+          - order-service.default 
